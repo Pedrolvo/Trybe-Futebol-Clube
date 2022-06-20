@@ -1,5 +1,6 @@
-import * as Joi from 'joi';
 import { Request, Response, NextFunction } from 'express';
+import Joi from 'joi';
+
 
 const loginSchema = Joi.object().keys({
   email: Joi.string().empty().required(),
