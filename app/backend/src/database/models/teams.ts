@@ -26,7 +26,7 @@ matches.belongsTo(teams, {
 
 teams.hasMany(matches, {
   foreignKey: 'home_team',
-  as: 'teamhome'
+  as: 'teamHome'
 });
 teams.hasMany(matches, {
   foreignKey: 'away_team',
