@@ -1,4 +1,9 @@
 import * as express from 'express';
+import * as cors from 'cors';
+import router from './database/routes';
+import errorHandler from './database/middlewares/error';
+
+
 
 class App {
   public app: express.Express;
@@ -8,6 +13,9 @@ class App {
     // ...
     this.app = express();
     this.config();
+    this.cors();
+    this.router();
+    this.error();
     // ...
   }
 
@@ -21,8 +29,20 @@ class App {
 
     this.app.use(accessControl);
     // ...
+    this.app.use(express.json());
   }
 
+  private router(): void {
+    this.app.use(router);
+  }
+
+  private error(): void {
+    this.app.use(errorHandler);
+  }
+
+  private cors(): void {
+    this.app.use(cors());
+  }
   // ...
   public start(PORT: string | number):void {
     // ...
