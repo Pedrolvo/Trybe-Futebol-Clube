@@ -15,12 +15,12 @@ const newToken = (payload: IToken): string => {
   return token;
 };
 
-const validateToken = async (token: string) => {
+const validateToken = (token: string) => {
   const key = fs.readFileSync('jwt.evaluation.key', 'utf8');
 
   const decode = jwt.verify(token, key);
 
-  return decode;
+  return decode as IToken;
 };
 
 export { newToken, validateToken };

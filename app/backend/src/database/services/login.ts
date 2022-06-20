@@ -1,6 +1,6 @@
 import users from '../models/users';
 import { IUser } from '../interfaces/users';
-import { newToken } from '../helpers/token';
+import { newToken, validateToken } from '../helpers/token';
 import crypto from '../helpers/cryptPassword';
 
 
@@ -26,6 +26,20 @@ class LoginService {
       token,
     };
   };
+
+  validation = async (token: string): Promise<string | null> => {
+    if (!token) return null;
+    
+    const decodeToken = validateToken(token);
+    const user = await users.findOne({ where: {
+      id: decodeToken.data.id
+    }});
+    if (!user) return null;
+
+    const userLogin = user.role;
+
+    return userLogin;
+  }
 }
 
 export default new LoginService();
