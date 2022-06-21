@@ -79,6 +79,15 @@ class MatchServices {
     await this.models.update({ inProgress: false }, { where: { id } });
     return true;
   }
+
+  async patchById(homeTeamGoals: number, awayTeamGoals: number, id: number): Promise<boolean> {
+    const pkPatch = await this.models.findByPk(id);
+    if (!pkPatch) return false;
+
+    await this.models.update({ homeTeamGoals, awayTeamGoals }, { where: { id } });
+
+    return true;
+  }
 }
 
 export default new MatchServices();
