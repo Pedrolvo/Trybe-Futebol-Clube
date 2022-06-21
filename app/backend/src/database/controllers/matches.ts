@@ -50,6 +50,21 @@ class MatchControllers {
       next(err);
     }
   };
+
+  patchById = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { id } = req.params;
+      const { homeTeamGoals, awayTeamGoals } = req.body;
+
+      const pkPatch = await MatchServices
+        .patchById(Number(homeTeamGoals), Number(awayTeamGoals), Number(id));
+      if (!pkPatch) return res.status(404).json({ message: 'ERROR' });
+
+      return res.status(200).json({ message: 'Finished' });
+    } catch (err) {
+      next(err);
+    }
+  };
 }
 
 export default new MatchControllers();
