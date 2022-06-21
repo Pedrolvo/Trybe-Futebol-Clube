@@ -11,4 +11,13 @@ interface IMatch {
   teamAway?: ITeam,
 }
 
-export default IMatch;
+interface ICreateMatch {
+  id?: number,
+  homeTeam: number,
+  homeTeamGoals: number,
+  awayTeam: number,
+  awayTeamGoals: number,
+  inProgress: boolean,
+}
+
+export { IMatch, ICreateMatch };
