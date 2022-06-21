@@ -2,6 +2,7 @@ import matches from '../models/matches';
 import Teams from '../models/teams';
 import { ICreateMatch, IMatch } from '../interfaces/matches';
 import LoginServices from './login';
+import TeamServices from './teams';
 
 class MatchServices {
   constructor(private models = matches) {}
@@ -47,13 +48,20 @@ class MatchServices {
     return games;
   }
 
-  async createMatch(macthInfo: ICreateMatch, token: string): Promise<ICreateMatch | null> {
+  async createMatch(macthInfo: ICreateMatch, token: string):
+  Promise<ICreateMatch | null | boolean> {
     const validate = await LoginServices.validation(token);
 
     if (!validate) return null;
 
     const { homeTeam, homeTeamGoals, awayTeam, awayTeamGoals, inProgress } = macthInfo;
 
+    if (homeTeam === awayTeam) return false;
+
+    const nullIdTeam = [homeTeam, awayTeam]
+      .map((id) => TeamServices.getTeamById(id));
+    const resultNullId = await Promise.all(nullIdTeam);
+    if (resultNullId.includes(null)) return true;
     const newMatch = await this.models.create({
       homeTeam,
       homeTeamGoals,
