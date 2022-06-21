@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import Joi from 'joi';
 
-
 const loginSchema = Joi.object().keys({
   email: Joi.string().empty().required(),
   password: Joi.string().min(6).empty().required(),

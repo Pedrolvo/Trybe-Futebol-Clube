@@ -9,7 +9,7 @@ const newToken = (payload: IToken): string => {
   };
 
   const key = fs.readFileSync('jwt.evaluation.key', 'utf8');
-  
+
   const token = jwt.sign(payload, key, jwtConfig);
 
   return token;

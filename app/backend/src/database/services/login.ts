@@ -3,7 +3,6 @@ import { IUser } from '../interfaces/users';
 import { newToken, validateToken } from '../helpers/token';
 import crypto from '../helpers/cryptPassword';
 
-
 class LoginService {
   constructor(private models = users) {}
 
@@ -14,7 +13,7 @@ class LoginService {
     const test = crypto(password, user.password);
     if (!test) return null;
 
-    const token = newToken({ data: {role: user.role, id: user.id } });
+    const token = newToken({ data: { role: user.role, id: user.id } });
 
     return {
       user: {
@@ -29,17 +28,17 @@ class LoginService {
 
   validation = async (token: string): Promise<string | null> => {
     if (!token) return null;
-    
+
     const decodeToken = validateToken(token);
     const user = await users.findOne({ where: {
-      id: decodeToken.data.id
-    }});
+      id: decodeToken.data.id,
+    } });
     if (!user) return null;
 
     const userLogin = user.role;
 
     return userLogin;
-  }
+  };
 }
 
 export default new LoginService();

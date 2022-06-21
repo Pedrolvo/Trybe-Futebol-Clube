@@ -1,9 +1,10 @@
 import matches from '../models/matches';
 import Teams from '../models/teams';
-import IMatch from '../interfaces/matches';
+import { ICreateMatch, IMatch } from '../interfaces/matches';
+import LoginServices from './login';
 
 class MatchServices {
-  constructor( private models = matches) {}
+  constructor(private models = matches) {}
 
   async getAllMatches(): Promise<IMatch[]> {
     const games = await this.models.findAll({
@@ -30,11 +31,10 @@ class MatchServices {
       return all;
     }
 
-    const games = await this.models.findAll({
-      where: { inProgress },
+    const games = await this.models.findAll({ where: { inProgress },
       include: [
         {
-          model:Teams,
+          model: Teams,
           as: 'teamHome',
           attributes: { exclude: ['id'] },
         },
@@ -42,10 +42,34 @@ class MatchServices {
           model: Teams,
           as: 'teamAway',
           attributes: { exclude: ['id'] },
-        },
-      ],
+        }],
     });
     return games;
+  }
+
+  async createMatch(macthInfo: ICreateMatch, token: string): Promise<ICreateMatch | null> {
+    const validate = await LoginServices.validation(token);
+
+    if (!validate) return null;
+
+    const { homeTeam, homeTeamGoals, awayTeam, awayTeamGoals, inProgress } = macthInfo;
+
+    const newMatch = await this.models.create({
+      homeTeam,
+      homeTeamGoals,
+      awayTeam,
+      awayTeamGoals,
+      inProgress });
+
+    return newMatch;
+  }
+
+  async patchMatch(id: number): Promise<boolean> {
+    const pkPatch = await this.models.findByPk(id);
+    if (!pkPatch) return false;
+
+    await this.models.update({ inProgress: false }, { where: { id } });
+    return true;
   }
 }
 
