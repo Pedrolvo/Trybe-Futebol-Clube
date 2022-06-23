@@ -44,14 +44,14 @@ class LeaderBoardHomeServices {
   static leaderBoard(matches: Matches[]) {
     return {
       totalPoints: this.totalPoints(matches),
-      totaGames: matches.length,
+      totalGames: matches.length,
       totalVictories: this.victories(matches),
       totalDraws: this.draws(matches),
       totalLosses: this.losses(matches),
       goalsFavor: this.goalsFavor(matches),
       goalsOwn: this.goalsOwn(matches),
       goalsBalance: this.goalsBalance(matches),
-      efficiency: this.efficiency(matches),
+      efficiency: +(this.efficiency(matches)),
     };
   }
 
