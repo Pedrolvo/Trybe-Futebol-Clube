@@ -1,4 +1,4 @@
-import * as express from 'express';
+import express from 'express';
 
 import routerLogin from './login';
 import routerTeam from './teams';
